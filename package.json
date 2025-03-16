@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": " npx playwright test --headed"
+    "test": " npx playwright test --headed",
+    "testHeadless": " npx playwright test",
+    "firefox": " npx playwright test --headed --browser=firefox"
   },
   "keywords": [],
   "author": "",
