@@ -1,12 +1,35 @@
 const { test, expect } = require('@playwright/test');
 
-test(' browser context test', async ({ browser }) => {
+test.only('Login as User with Valid Credentials', async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
-  await page.goto('https://playwright.dev/');
+  await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
+  await page.waitForLoadState('domcontentloaded');
   const title = await page.title();
   console.log(title);
-  await page.waitForTimeout(2000);
+  await page.locator('#username').fill('rahulshetty');
+  await page.locator('input#password').fill('learning');
+  await page.locator('[id="signInBtn"]').click();
+});
+
+test.skip('Login as User with wrong Details ', async ({ browser }) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
+  await page.waitForLoadState('domcontentloaded');
+  const title = await page.title();
+  console.log(title);
+  await page.locator('#username').fill('rahulshetty');
+  await page.locator('input#password').fill('learning');
+  await page.locator('[id="signInBtn"]').click();
+  const errorMessage = await page.locator('[style*="block"]').textContent();
+  console.log(errorMessage);
+  await expect(page.locator('[style*="block"]')).toContainText('Incorrect');
+  // const errorMessage = await page
+  //   .locator('[class*="alert-danger"]')
+  //   .textContent();
+  // console.log(errorMessage.trim());
+  await page.locator('//div/strong[text()="Incorrect"]').isVisible();
 });
 
 test(' Page context test', async ({ page }) => {
