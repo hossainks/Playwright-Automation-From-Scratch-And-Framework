@@ -4,12 +4,23 @@ test.only('Login as User with Valid Credentials', async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
   await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
-  await page.waitForLoadState('domcontentloaded');
+
+  const userNmae = page.locator('#username');
+  const password = page.locator('input#password');
+  const signIn = page.locator('[id="signInBtn"]');
+
   const title = await page.title();
   console.log(title);
-  await page.locator('#username').fill('rahulshetty');
-  await page.locator('input#password').fill('learning');
-  await page.locator('[id="signInBtn"]').click();
+
+  await userNmae.fill('rahulshettyacademy');
+  await password.fill('learning');
+  await signIn.click();
+  await page.waitForLoadState('domcontentloaded');
+  await expect(page).toHaveTitle('ProtoCommerce');
+  await expect(page.locator('.card-title a').first()).toContainText('iphone X');
+  await expect(page.locator('.card-title a').nth(1)).toContainText(
+    'Samsung Note 8'
+  );
 });
 
 test.skip('Login as User with wrong Details ', async ({ browser }) => {
