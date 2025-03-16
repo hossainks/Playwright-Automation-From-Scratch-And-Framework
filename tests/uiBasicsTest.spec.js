@@ -1,4 +1,4 @@
-const { test } = require('@playwright/test');
+const { test, expect } = require('@playwright/test');
 
 test(' browser context test', async ({ browser }) => {
   const context = await browser.newContext();
@@ -9,7 +9,7 @@ test(' browser context test', async ({ browser }) => {
   await page.waitForTimeout(2000);
 });
 
-test(' Page context test', async ({ page, expect }) => {
+test(' Page context test', async ({ page }) => {
   await page.goto('https://www.google.com/');
   const title = await page.title();
   console.log(title);
