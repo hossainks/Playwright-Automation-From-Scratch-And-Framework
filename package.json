@@ -5,6 +5,8 @@
   "scripts": {
     "test": " npx playwright test --headed",
     "testHeadless": " npx playwright test",
+    "clientApp": " npx playwright test clientApp.spec.js",
+    "practiseApp": " npx playwright test uiBasicsTest.spec.js",
     "firefox": " npx playwright test --headed --browser=firefox"
   },
   "keywords": [],

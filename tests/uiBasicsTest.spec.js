@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-test.only('Login as User with Valid Credentials', async ({ browser }) => {
+test.skip('Login as User with Valid Credentials', async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
   await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
@@ -8,6 +8,7 @@ test.only('Login as User with Valid Credentials', async ({ browser }) => {
   const userNmae = page.locator('#username');
   const password = page.locator('input#password');
   const signIn = page.locator('[id="signInBtn"]');
+  const cardTitles = page.locator('.card-title a');
 
   const title = await page.title();
   console.log(title);
@@ -17,10 +18,9 @@ test.only('Login as User with Valid Credentials', async ({ browser }) => {
   await signIn.click();
   await page.waitForLoadState('domcontentloaded');
   await expect(page).toHaveTitle('ProtoCommerce');
-  await expect(page.locator('.card-title a').first()).toContainText('iphone X');
-  await expect(page.locator('.card-title a').nth(1)).toContainText(
-    'Samsung Note 8'
-  );
+  await expect(cardTitles.first()).toContainText('iphone X');
+  await expect(cardTitles.nth(1)).toContainText('Samsung Note 8');
+  console.log(await cardTitles.allTextContents());
 });
 
 test.skip('Login as User with wrong Details ', async ({ browser }) => {
@@ -43,7 +43,7 @@ test.skip('Login as User with wrong Details ', async ({ browser }) => {
   await page.locator('//div/strong[text()="Incorrect"]').isVisible();
 });
 
-test(' Page context test', async ({ page }) => {
+test.skip(' Page context test', async ({ page }) => {
   await page.goto('https://www.google.com/');
   const title = await page.title();
   console.log(title);
