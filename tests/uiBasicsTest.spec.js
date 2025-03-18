@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const { ok } = require('assert');
 
 test.skip('Login as User with Valid Credentials', async ({ browser }) => {
   const context = await browser.newContext();
@@ -49,4 +50,82 @@ test.skip(' Page context test', async ({ page }) => {
   console.log(title);
   await page.waitForTimeout(2000);
   await expect(page).toHaveTitle('Google');
+});
+
+const isBlinking = async (page, locator) => {
+  // Get initial opacity
+  let lastOpacity = await locator.evaluate(
+    (el) => window.getComputedStyle(el).opacity
+  );
+
+  // Extract the actual DOM element
+  const elementHandle = await locator.elementHandle();
+
+  // Wait until opacity changes
+  await page.waitForFunction(
+    (el, lastOpacity) => {
+      const opacity = window.getComputedStyle(el).opacity;
+      return opacity !== lastOpacity;
+    },
+    elementHandle, // Pass the actual DOM element
+    lastOpacity // Pass the previous opacity value
+  );
+};
+
+test.skip(' UI controls', async ({ page }) => {
+  await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
+
+  const userNmae = page.locator('#username');
+  const password = page.locator('input#password');
+  const signIn = page.locator('[id="signInBtn"]');
+  const dropdown = page.locator('select.form-control');
+  const radio = page.locator("input[type='radio']").last();
+  const okbutton = page.locator('#okayBtn');
+  const terms = page.locator("input[name='terms']");
+  const blinkText = page.locator("[href*='documents-request']");
+  await dropdown.selectOption('consult');
+  if (!(await radio.isChecked())) {
+    await radio.check();
+  }
+  await okbutton.click();
+  await expect(radio).toBeChecked();
+  await terms.check();
+  await expect(terms).toBeChecked();
+  await terms.uncheck();
+  await expect(terms).not.toBeChecked();
+  expect(await terms.isChecked()).toBeFalsy();
+  await expect(blinkText).toHaveAttribute('class', 'blinkingText');
+  await isBlinking(page, blinkText);
+  //await page.pause();
+  await page.waitForTimeout(5000);
+});
+
+test.only(' Child Window', async ({ browser }) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+
+  await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
+  const userNmae = page.locator('#username');
+
+  const blinkText = page.locator("[href*='documents-request']");
+  await expect(blinkText).toHaveAttribute('class', 'blinkingText');
+  await isBlinking(page, blinkText);
+
+  const [newPage] = await Promise.all([
+    context.waitForEvent('page'),
+    blinkText.click(),
+  ]);
+
+  await newPage.waitForLoadState('load');
+  const emailText = newPage.locator('p[class*="red"]');
+  console.log(await emailText.textContent());
+
+  const emailPart = await newPage.locator('p[class*="red"] a').textContent();
+  const [, email] = emailPart.split('@');
+  //const email = emailPart.split('@')[1];
+  console.log(email);
+  await page.bringToFront();
+  await userNmae.fill(email);
+
+  await newPage.waitForTimeout(5000);
 });
