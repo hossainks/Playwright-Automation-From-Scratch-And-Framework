@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const { ok } = require('assert');
 
-test.skip('Login as User with Valid Credentials', async ({ browser }) => {
+test('Login as User with Valid Credentials', async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
   await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
@@ -24,7 +24,7 @@ test.skip('Login as User with Valid Credentials', async ({ browser }) => {
   console.log(await cardTitles.allTextContents());
 });
 
-test.skip('Login as User with wrong Details ', async ({ browser }) => {
+test('Login as User with wrong Details ', async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
   await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
@@ -44,7 +44,7 @@ test.skip('Login as User with wrong Details ', async ({ browser }) => {
   await page.locator('//div/strong[text()="Incorrect"]').isVisible();
 });
 
-test.skip(' Page context test', async ({ page }) => {
+test(' Page context test', async ({ page }) => {
   await page.goto('https://www.google.com/');
   const title = await page.title();
   console.log(title);
@@ -72,7 +72,7 @@ const isBlinking = async (page, locator) => {
   );
 };
 
-test.skip(' UI controls', async ({ page }) => {
+test(' UI controls', async ({ page }) => {
   await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
 
   const userNmae = page.locator('#username');
@@ -100,7 +100,7 @@ test.skip(' UI controls', async ({ page }) => {
   await page.waitForTimeout(5000);
 });
 
-test.only(' Child Window', async ({ browser }) => {
+test(' Child Window', async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
 

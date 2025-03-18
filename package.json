@@ -7,6 +7,7 @@
     "testHeadless": " npx playwright test",
     "clientApp": " npx playwright test clientApp.spec.js",
     "practiseApp": " npx playwright test uiBasicsTest.spec.js",
+    "practiceDebug": " npx playwright test uiBasicsTest.spec.js --debug",
     "firefox": " npx playwright test --headed --browser=firefox"
   },
   "keywords": [],

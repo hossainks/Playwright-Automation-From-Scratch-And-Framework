@@ -1,7 +1,8 @@
 const { test, expect } = require('@playwright/test');
 
-test.only('Login as User with Valid Credentials', async ({ page }) => {
+test('Login as User with Valid Credentials', async ({ page }) => {
   await page.goto('https://rahulshettyacademy.com/client');
+  await page.waitForLoadState('domcontentloaded');
 
   const userNmae = page.locator('[formcontrolname="userEmail"]');
   const password = page.locator('[type="password"]');
