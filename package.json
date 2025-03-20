@@ -5,7 +5,7 @@
   "scripts": {
     "test": " npx playwright test --headed",
     "testHeadless": " npx playwright test",
-    "clientApp": " npx playwright test clientApp.spec.js",
+    "clientApp": " npx playwright test clientApp.spec.js --headed",
     "practiseApp": " npx playwright test uiBasicsTest.spec.js",
     "practiceDebug": " npx playwright test uiBasicsTest.spec.js --debug",
     "firefox": " npx playwright test --headed --browser=firefox"
