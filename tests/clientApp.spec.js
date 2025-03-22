@@ -30,6 +30,8 @@ test.only('Add a product to cart', async ({ page }) => {
   const products = page.locator('.card-body');
   const cardTitles = page.locator('.card-body b');
   const productName = 'ADIDAS ORIGINAL';
+  const cart = page.locator("[routerlink*='cart']");
+  const productNameonCart = page.locator("[class='cartSection'] h3");
 
   await userNmae.fill('manjuk.hossainown@gmail.com');
   await password.fill('KhaTest123456%');
@@ -45,5 +47,10 @@ test.only('Add a product to cart', async ({ page }) => {
       break;
     }
   }
-  //await page.waitForTimeout(10000);
+  await cart.click();
+  expect(await productNameonCart.last().textContent()).toBe(productName);
+  expect(
+    await page.locator("h3:has-text('ADIDAS ORIGINAL')").isVisible()
+  ).toBeTruthy();
+  await page.waitForTimeout(5000);
 });
