@@ -32,6 +32,19 @@ test.only('Add a product to cart', async ({ page }) => {
   const productName = 'ADIDAS ORIGINAL';
   const cart = page.locator("[routerlink*='cart']");
   const productNameonCart = page.locator("[class='cartSection'] h3");
+  const checkout = page.locator("li[class='totalRow'] button");
+
+  // slectore for payment method
+  const expiryMonth = page.locator('select.input.ddl').nth(0);
+  const expiryDate = page.locator('select.input.ddl').nth(1);
+  const cvv = page.locator("div.field.small input[class='input txt']");
+  const cardName = page.locator("input[class='input txt']").last();
+  const coupon = page.locator("input[name='coupon']");
+  const applyCoupon = page.locator("button[type='submit']");
+
+  // selector for shipping address
+  const countryType = page.locator("[placeholder*='Country']");
+  const countryOptions = page.locator("[class*='ta-results']");
 
   await userNmae.fill('manjuk.hossainown@gmail.com');
   await password.fill('KhaTest123456%');
@@ -52,5 +65,31 @@ test.only('Add a product to cart', async ({ page }) => {
   expect(
     await page.locator("h3:has-text('ADIDAS ORIGINAL')").isVisible()
   ).toBeTruthy();
+
+  // Click on Checkout button
+  await checkout.click();
+  await page.getByText(' Payment Method ').waitFor();
+
+  // Filling up payment details
+  await expiryMonth.selectOption('10');
+  await expiryDate.selectOption('25');
+  await cardName.fill('Manjuk Hossain');
+  await cvv.fill('654');
+  await coupon.fill('rahylshettyacademy');
+  // await applyCoupon.click();
+
+  // Filling up shipping address
+  await countryType.pressSequentially('ind');
+  await countryOptions.waitFor();
+  const countryOptionsCount = await countryOptions.locator('button').count();
+  for (let i = 0; i < countryOptionsCount; i++) {
+    if (
+      (await countryOptions.locator('button').nth(i).textContent()) === ' India'
+    ) {
+      await countryOptions.locator('button').nth(i).click();
+      break;
+    }
+  }
+
   await page.waitForTimeout(5000);
 });
