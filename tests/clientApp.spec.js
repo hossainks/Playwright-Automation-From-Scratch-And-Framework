@@ -23,7 +23,7 @@ test('Login as User with Valid Credentials', async ({ page }) => {
 test.only('Add a product to cart', async ({ page }) => {
   await page.goto('https://rahulshettyacademy.com/client');
   await page.waitForLoadState('domcontentloaded');
-
+  const email = 'manjuk.hossainown@gmail.com';
   const userNmae = page.locator('[formcontrolname="userEmail"]');
   const password = page.locator('[type="password"]');
   const signIn = page.locator('#login');
@@ -49,7 +49,12 @@ test.only('Add a product to cart', async ({ page }) => {
   // Email Details
   const emailText = page.locator("label[type='text']");
 
-  await userNmae.fill('manjuk.hossainown@gmail.com');
+  // Place order
+  const placeOrder = page.locator('.action__submit');
+  const thankYouMessage = page.locator('h1.hero-primary');
+  const orderNumber = page.locator("label[class*='ng-star']");
+
+  await userNmae.fill(email);
   await password.fill('KhaTest123456%');
   await signIn.click();
   // await page.waitForLoadState('networkidle');
@@ -74,7 +79,7 @@ test.only('Add a product to cart', async ({ page }) => {
   await page.getByText(' Payment Method ').waitFor();
 
   // Verify email details
-  expect(await emailText.textContent()).toBe('manjuk.hossainown@gmail.com');
+  expect(await emailText.textContent()).toBe(email);
   // Filling up payment details
   await expiryMonth.selectOption('10');
   await expiryDate.selectOption('25');
@@ -95,6 +100,8 @@ test.only('Add a product to cart', async ({ page }) => {
       break;
     }
   }
-
+  await placeOrder.click();
+  await expect(thankYouMessage).toHaveText(' Thankyou for the order. ');
+  console.log(await orderNumber.textContent());
   await page.waitForTimeout(5000);
 });
