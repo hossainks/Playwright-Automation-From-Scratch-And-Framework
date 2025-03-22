@@ -46,6 +46,9 @@ test.only('Add a product to cart', async ({ page }) => {
   const countryType = page.locator("[placeholder*='Country']");
   const countryOptions = page.locator("[class*='ta-results']");
 
+  // Email Details
+  const emailText = page.locator("label[type='text']");
+
   await userNmae.fill('manjuk.hossainown@gmail.com');
   await password.fill('KhaTest123456%');
   await signIn.click();
@@ -70,6 +73,8 @@ test.only('Add a product to cart', async ({ page }) => {
   await checkout.click();
   await page.getByText(' Payment Method ').waitFor();
 
+  // Verify email details
+  expect(await emailText.textContent()).toBe('manjuk.hossainown@gmail.com');
   // Filling up payment details
   await expiryMonth.selectOption('10');
   await expiryDate.selectOption('25');
