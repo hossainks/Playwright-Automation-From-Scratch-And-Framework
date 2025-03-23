@@ -53,6 +53,13 @@ test.only('Add a product to cart', async ({ page }) => {
   const placeOrder = page.locator('.action__submit');
   const thankYouMessage = page.locator('h1.hero-primary');
   const orderNumber = page.locator("label[class*='ng-star']");
+  const ordersTab = page.locator("button[routerlink*='myorders']");
+
+  // Orders page
+  const ordersPage = page.locator('h1.ng-star-inserted');
+  const allOrders = page.locator('tbody');
+  const orderSummary = page.locator('.email-title');
+  const orderNumberinSummary = page.locator('.-main');
 
   await userNmae.fill(email);
   await password.fill('KhaTest123456%');
@@ -102,6 +109,25 @@ test.only('Add a product to cart', async ({ page }) => {
   }
   await placeOrder.click();
   await expect(thankYouMessage).toHaveText(' Thankyou for the order. ');
-  console.log(await orderNumber.textContent());
+  const exactOrderNumer = (await orderNumber.textContent())
+    .split('|')
+    .join('')
+    .trim();
+  console.log(exactOrderNumer);
+  await ordersTab.click();
+  await ordersPage.waitFor();
+  await expect(ordersPage).toHaveText('Your Orders');
+
+  const ordersCount = await allOrders.locator('tr').count();
+  for (let i = 0; i < ordersCount; i++) {
+    if (
+      (await allOrders.locator('th').nth(i).textContent()) === exactOrderNumer
+    ) {
+      await allOrders.locator('td button.btn-primary').nth(i).click();
+      break;
+    }
+  }
+  await orderSummary.waitFor();
+  await expect(orderNumberinSummary).toHaveText(exactOrderNumer);
   await page.waitForTimeout(5000);
 });
