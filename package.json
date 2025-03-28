@@ -6,6 +6,7 @@
     "test": " npx playwright test --headed",
     "testHeadless": " npx playwright test",
     "clientApp": " npx playwright test clientApp.spec.js --headed",
+    "clientAppOthers": " npx playwright test clientAppOthers.spec.js --headed",
     "practiseApp": " npx playwright test uiBasicsTest.spec.js",
     "angularApp": " npx playwright test angularpractice.spec.js",
     "angularAppUI": " npx playwright test angularpractice.spec.js --ui",
