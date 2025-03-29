@@ -161,5 +161,14 @@ test.only('Login using GetBy', async ({ page }) => {
   await expect(page.getByText('ADIDAS ORIGINAL')).toBeVisible();
   await page.getByRole('button', { name: 'Checkout' }).click();
   expect(await page.getByText('Payment Method').isVisible()).toBeTruthy();
+
+  await page.getByPlaceholder('Select Country').pressSequentially('ind');
+  await page
+    .locator('.ta-results')
+    .filter({ hasText: 'India' })
+    //.getByRole('button', { name: 'India' })
+    .click();
+  await page.getByText('Place Order').click();
+  await expect(page.getByText('Thankyou for the order.')).toBeVisible();
   await page.waitForTimeout(10000);
 });
