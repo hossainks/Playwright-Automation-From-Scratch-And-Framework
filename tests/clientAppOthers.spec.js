@@ -146,12 +146,20 @@ test.only('Login using GetBy', async ({ page }) => {
   await signIn.click();
   await page.waitForLoadState('domcontentloaded');
   await cardTitles.first().waitFor();
+  console.log(await cardTitles.allTextContents());
   await page
     .locator('.card-body')
     .filter({ hasText: 'ADIDAS ORIGINAL' })
     .getByRole('button', { name: 'Add To Cart' })
     .click();
-  await page.getByRole('button', { name: 'Cart' }).first().click();
-  console.log(await cardTitles.allTextContents());
+  // await page.getByRole('button', { name: 'Cart' }).first().click();
+  await page
+    .getByRole('listitem')
+    .getByRole('button', { name: 'Cart' })
+    .click();
+
+  await expect(page.getByText('ADIDAS ORIGINAL')).toBeVisible();
+  await page.getByRole('button', { name: 'Checkout' }).click();
+  expect(await page.getByText('Payment Method').isVisible()).toBeTruthy();
   await page.waitForTimeout(10000);
 });
