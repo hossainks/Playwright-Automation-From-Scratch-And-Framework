@@ -10,6 +10,7 @@
     "practiseApp": " npx playwright test uiBasicsTest.spec.js",
     "angularApp": " npx playwright test angularpractice.spec.js",
     "angularAppUI": " npx playwright test angularpractice.spec.js --ui",
+    "calender": " npx playwright test calender.spec.js --headed",
     "practiceDebug": " npx playwright test uiBasicsTest.spec.js --debug",
     "firefox": " npx playwright test --headed --browser=firefox"
   },
