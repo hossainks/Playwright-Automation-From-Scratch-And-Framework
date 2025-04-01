@@ -24,9 +24,7 @@ test.only('Dialog Valiadation', async ({ page }) => {
     //await dialog.dismiss();
   });
   await dialogText.click();
-
   const hoverbutton = page.locator('#mousehover');
   await hoverbutton.hover();
-
   await page.waitForTimeout(5000);
 });
