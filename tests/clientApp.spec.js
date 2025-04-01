@@ -129,5 +129,4 @@ test.only('Add a product to cart', async ({ page }) => {
   }
   await orderSummary.waitFor();
   await expect(orderNumberinSummary).toHaveText(exactOrderNumer);
-  await page.waitForTimeout(5000);
 });
