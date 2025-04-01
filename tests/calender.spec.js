@@ -15,30 +15,38 @@ test('Calender Valiadation', async ({ page }) => {
   const monthLocator = page.locator("button[class*='months__month']");
   await monthLocator.nth(Number(month) - 1).click();
   await page.locator(`//abbr[text()=${date}]`).click();
-  /* const dateLocator = page.locator("button[class*='days__day']");
-  for (let i = 0; i < (await dateLocator.count()); i++) {
-    const dateText = await dateLocator.nth(i).textContent();
-    if (dateText === date) {
-      await dateLocator.nth(i).click();
-      break;
-    }
-  } */
+  const selectedDate = await page
+    .locator('.react-date-picker__inputGroup')
+    .textContent();
 
-  /* for (let i = 0; i < (await yearLocator.count()); i++) {
-    const yearText = await yearLocator.nth(i).textContent();
-    if (yearText === year) {
-      await yearLocator.nth(i).click();
-      break;
-    }
-  } */
+  // One way
+  const getMonth = await page.locator("[name='month']").inputValue();
+  const getDate = await page.locator("[name='day']").inputValue();
+  const getYear = await page.locator("[name='year']").inputValue();
+  expect(getMonth).toBe(month);
+  expect(getDate).toBe(date);
+  expect(getYear).toBe(year);
 
-  /*  for (let i = 0; i < (await monthLocator.count()); i++) {
-    const monthText = await monthLocator.nth(i).textContent();
-    if (monthText === month) {
-      await monthLocator.nth(i).click();
-      break;
+  // Another way
+  const getFullDate = page.locator('.react-date-picker__inputGroup input');
+  for (let i = 0; i < (await getFullDate.count()); i++) {
+    const getDate = await getFullDate.nth(i).inputValue();
+    if (i == 1) {
+      expect(getDate).toBe(month);
+    } else if (i == 2) {
+      expect(getDate).toBe(date);
+    } else if (i == 3) {
+      expect(getDate).toBe(year);
     }
-  }  */
+  }
+
+  // Another way
+  const expectedList = [month, date, year];
+  const inputs = page.locator('.react-date-picker__inputGroup input');
+  for (let index = 0; index < expectedList.length; index++) {
+    const value = await inputs.nth(index + 1).getAttribute('value');
+    expect(value).toEqual(expectedList[index]);
+  }
 
   await page.waitForTimeout(10000);
 });
