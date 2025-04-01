@@ -9,9 +9,24 @@ test('Button Valiadation', async ({ page }) => {
   await expect(text).not.toBeVisible();
 });
 
-test.only('Popup Valiadation', async ({ page }) => {
+test('Popup Valiadation', async ({ page }) => {
   await page.goto('https://rahulshettyacademy.com/AutomationPractice/');
   await page.goto('https://www.google.com/');
   await page.goBack();
   await page.goForward();
+});
+
+test.only('Dialog Valiadation', async ({ page }) => {
+  const dialogText = page.locator('#confirmbtn');
+  page.goto('https://rahulshettyacademy.com/AutomationPractice/');
+  page.on('dialog', async (dialog) => {
+    await dialog.accept();
+    //await dialog.dismiss();
+  });
+  await dialogText.click();
+
+  const hoverbutton = page.locator('#mousehover');
+  await hoverbutton.hover();
+
+  await page.waitForTimeout(5000);
 });
