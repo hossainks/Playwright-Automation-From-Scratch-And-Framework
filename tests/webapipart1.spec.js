@@ -1,5 +1,5 @@
 const { test, expect, request } = require('@playwright/test');
-
+let token;
 test.beforeAll(async () => {
   const apiContext = await request.newContext();
   const url = 'https://rahulshettyacademy.com/api/ecom/auth/login';
@@ -10,19 +10,19 @@ test.beforeAll(async () => {
   const response = await apiContext.post(url, { data: loginPayload });
   expect(response.ok()).toBeTruthy();
   const responseBody = await response.json();
-  const token = responseBody.token;
+  token = responseBody.token;
   console.log(token);
 });
 
 test.beforeEach(async ({ page }) => {});
 
 test('Add a product to cart', async ({ page }) => {
+  const email = 'manjuk.hossainown@gmail.com';
+  page.addInitScript((value) => {
+    window.localStorage.setItem('token', value);
+  }, token);
   await page.goto('https://rahulshettyacademy.com/client');
   await page.waitForLoadState('domcontentloaded');
-  const email = 'manjuk.hossainown@gmail.com';
-  const userNmae = page.locator('[formcontrolname="userEmail"]');
-  const password = page.locator('[type="password"]');
-  const signIn = page.locator('#login');
   const products = page.locator('.card-body');
   const cardTitles = page.locator('.card-body b');
   const productName = 'ADIDAS ORIGINAL';
@@ -56,10 +56,6 @@ test('Add a product to cart', async ({ page }) => {
   const allOrders = page.locator('tbody');
   const orderSummary = page.locator('.email-title');
   const orderNumberinSummary = page.locator('.-main');
-
-  await userNmae.fill(email);
-  await password.fill('KhaTest123456%');
-  await signIn.click();
   // await page.waitForLoadState('networkidle');
   await cardTitles.first().waitFor();
 
