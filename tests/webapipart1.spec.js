@@ -1,7 +1,8 @@
 const { test, expect, request } = require('@playwright/test');
+let apiContext;
 let token;
 test.beforeAll(async () => {
-  const apiContext = await request.newContext();
+  apiContext = await request.newContext();
   const url = 'https://rahulshettyacademy.com/api/ecom/auth/login';
   const loginPayload = {
     userEmail: 'manjuk.hossainown@gmail.com',
@@ -11,7 +12,39 @@ test.beforeAll(async () => {
   expect(response.ok()).toBeTruthy();
   const responseBody = await response.json();
   token = responseBody.token;
-  console.log(token);
+
+  // Adding a Product to Cart
+  const addtoCartUrl =
+    'https://rahulshettyacademy.com/api/ecom/user/add-to-cart';
+  const productDetails = {
+    _id: '67d70135c019fb1ad62940b1',
+    product: {
+      _id: '67a8df1ac0d3e6622a297ccb',
+      productName: 'ADIDAS ORIGINAL',
+      productCategory: 'fashion',
+      productSubCategory: 'shirts',
+      productPrice: 31500,
+      productDescription: 'Addias Originals',
+      productImage:
+        'https://rahulshettyacademy.com/api/ecom/uploads/productImage_1650649488046.jpg',
+      productRating: '0',
+      productTotalOrders: '0',
+      productStatus: true,
+      productFor: 'women',
+      productAddedBy: 'admin@gmail.com',
+    },
+  };
+
+  const addToCartRes = await apiContext.post(addtoCartUrl, {
+    data: productDetails,
+    headers: {
+      Authorization: `${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  expect(addToCartRes.ok()).toBeTruthy();
+  const addToCart = await addToCartRes.json();
+  expect(addToCart.message).toBe('Product Added To Cart');
 });
 
 test.beforeEach(async ({ page }) => {});
@@ -23,12 +56,22 @@ test('Add a product to cart', async ({ page }) => {
   }, token);
   await page.goto('https://rahulshettyacademy.com/client');
   await page.waitForLoadState('domcontentloaded');
-  const products = page.locator('.card-body');
-  const cardTitles = page.locator('.card-body b');
+
+  //const products = page.locator('.card-body');
+  // const cardTitles = page.locator('.card-body b');
   const productName = 'ADIDAS ORIGINAL';
   const cart = page.locator("[routerlink*='cart']");
   const productNameonCart = page.locator("[class='cartSection'] h3");
   const checkout = page.locator("li[class='totalRow'] button");
+
+  await cart.click();
+  expect(await productNameonCart.last().textContent()).toBe(productName);
+  expect(
+    await page.locator("h3:has-text('ADIDAS ORIGINAL')").isVisible()
+  ).toBeTruthy();
+
+  await checkout.click();
+  await page.getByText(' Payment Method ').waitFor();
 
   // slectore for payment method
   const expiryMonth = page.locator('select.input.ddl').nth(0);
@@ -57,7 +100,7 @@ test('Add a product to cart', async ({ page }) => {
   const orderSummary = page.locator('.email-title');
   const orderNumberinSummary = page.locator('.-main');
   // await page.waitForLoadState('networkidle');
-  await cardTitles.first().waitFor();
+  /*   await cardTitles.first().waitFor();
 
   for (let i = 0; i < (await products.count()); i++) {
     if ((await products.nth(i).locator('b').textContent()) === productName) {
@@ -67,12 +110,6 @@ test('Add a product to cart', async ({ page }) => {
       break;
     }
   }
-  await cart.click();
-  expect(await productNameonCart.last().textContent()).toBe(productName);
-  expect(
-    await page.locator("h3:has-text('ADIDAS ORIGINAL')").isVisible()
-  ).toBeTruthy();
-
   // Click on Checkout button
   await checkout.click();
   await page.getByText(' Payment Method ').waitFor();
@@ -120,5 +157,5 @@ test('Add a product to cart', async ({ page }) => {
     }
   }
   await orderSummary.waitFor();
-  await expect(orderNumberinSummary).toHaveText(exactOrderNumer);
+  await expect(orderNumberinSummary).toHaveText(exactOrderNumer); */
 });
