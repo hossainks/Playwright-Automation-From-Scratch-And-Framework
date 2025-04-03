@@ -1,14 +1,18 @@
 const { test, expect, request } = require('@playwright/test');
 const ApiUtils = require('../utils/apiutils.js');
-let apiUtils;
 
+let apiUtils;
 let apiContext;
 let token;
+const loginPayload = {
+  userEmail: 'manjuk.hossainown@gmail.com',
+  userPassword: 'KhaTest123456%',
+};
+
 test.beforeAll(async () => {
   apiContext = await request.newContext();
-  apiUtils = new ApiUtils(apiContext);
+  apiUtils = new ApiUtils(apiContext, loginPayload);
   token = await apiUtils.getToken(expect);
-  console.log(token);
 
   // Adding a Product to Cart
   const productDetails = {
@@ -65,8 +69,6 @@ test('Add a product to cart', async ({ page }) => {
   // Verify email details
   expect(await emailText.textContent()).toBe(email);
 
-  const createOrderUrl =
-    'https://rahulshettyacademy.com/api/ecom/order/create-order';
   const orderPayload = {
     orders: [
       {
@@ -76,15 +78,7 @@ test('Add a product to cart', async ({ page }) => {
     ],
   };
 
-  const makeOrderRes = await apiContext.post(createOrderUrl, {
-    data: orderPayload,
-    headers: {
-      Authorization: `${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-  expect(makeOrderRes.ok()).toBeTruthy();
-  const makeOrder = await makeOrderRes.json();
+  const makeOrder = await apiUtils.createOrder(orderPayload, expect);
   const exactOrderNumer = makeOrder.orders[0];
   console.log(makeOrder.orders[0]);
 

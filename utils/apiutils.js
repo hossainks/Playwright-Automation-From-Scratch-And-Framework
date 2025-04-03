@@ -1,15 +1,14 @@
 class ApiUtils {
-  constructor(apiContext) {
+  constructor(apiContext, loginPayload) {
     this.apiContext = apiContext;
+    this.loginPayload = loginPayload;
   }
 
   async getToken(expect) {
     const url = 'https://rahulshettyacademy.com/api/ecom/auth/login';
-    const loginPayload = {
-      userEmail: 'manjuk.hossainown@gmail.com',
-      userPassword: 'KhaTest123456%',
-    };
-    const response = await this.apiContext.post(url, { data: loginPayload });
+    const response = await this.apiContext.post(url, {
+      data: this.loginPayload,
+    });
     expect(response.ok()).toBeTruthy();
     const responseBody = await response.json();
     return responseBody.token;
@@ -27,6 +26,20 @@ class ApiUtils {
     });
     expect(addToCartRes.ok()).toBeTruthy();
     return await addToCartRes.json();
+  }
+
+  async createOrder(orderPayload, expect) {
+    const createOrderUrl =
+      'https://rahulshettyacademy.com/api/ecom/order/create-order';
+    const makeOrderRes = await this.apiContext.post(createOrderUrl, {
+      data: orderPayload,
+      headers: {
+        Authorization: await this.getToken(expect),
+        'Content-Type': 'application/json',
+      },
+    });
+    expect(makeOrderRes.ok()).toBeTruthy();
+    return await makeOrderRes.json();
   }
 }
 
