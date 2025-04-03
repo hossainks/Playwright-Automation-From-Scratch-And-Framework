@@ -57,6 +57,9 @@ test('Add a product to cart', async ({ page }) => {
   await page.goto('https://rahulshettyacademy.com/client');
   await page.waitForLoadState('domcontentloaded');
 
+  // Email Details
+  const emailText = page.locator("label[type='text']");
+
   //const products = page.locator('.card-body');
   // const cardTitles = page.locator('.card-body b');
   const productName = 'ADIDAS ORIGINAL';
@@ -73,25 +76,33 @@ test('Add a product to cart', async ({ page }) => {
   await checkout.click();
   await page.getByText(' Payment Method ').waitFor();
 
-  // slectore for payment method
-  const expiryMonth = page.locator('select.input.ddl').nth(0);
-  const expiryDate = page.locator('select.input.ddl').nth(1);
-  const cvv = page.locator("div.field.small input[class='input txt']");
-  const cardName = page.locator("input[class='input txt']").last();
-  const coupon = page.locator("input[name='coupon']");
-  const applyCoupon = page.locator("button[type='submit']");
+  // Verify email details
+  expect(await emailText.textContent()).toBe(email);
 
-  // selector for shipping address
-  const countryType = page.locator("[placeholder*='Country']");
-  const countryOptions = page.locator("[class*='ta-results']");
+  const createOrderUrl =
+    'https://rahulshettyacademy.com/api/ecom/order/create-order';
+  const orderPayload = {
+    orders: [
+      {
+        country: 'India',
+        productOrderedId: '67a8df1ac0d3e6622a297ccb',
+      },
+    ],
+  };
 
-  // Email Details
-  const emailText = page.locator("label[type='text']");
+  const makeOrderRes = await apiContext.post(createOrderUrl, {
+    data: orderPayload,
+    headers: {
+      Authorization: `${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  expect(makeOrderRes.ok()).toBeTruthy();
+  const makeOrder = await makeOrderRes.json();
+  const exactOrderNumer = makeOrder.orders[0];
+  console.log(makeOrder.orders[0]);
 
   // Place order
-  const placeOrder = page.locator('.action__submit');
-  const thankYouMessage = page.locator('h1.hero-primary');
-  const orderNumber = page.locator("label[class*='ng-star']");
   const ordersTab = page.locator("button[routerlink*='myorders']");
 
   // Orders page
@@ -99,50 +110,7 @@ test('Add a product to cart', async ({ page }) => {
   const allOrders = page.locator('tbody');
   const orderSummary = page.locator('.email-title');
   const orderNumberinSummary = page.locator('.-main');
-  // await page.waitForLoadState('networkidle');
-  /*   await cardTitles.first().waitFor();
 
-  for (let i = 0; i < (await products.count()); i++) {
-    if ((await products.nth(i).locator('b').textContent()) === productName) {
-      //const addToCart = products.nth(i).locator('*.fa-shopping-cart');
-      const addToCart = products.nth(i).locator('text= Add To Cart');
-      await addToCart.click();
-      break;
-    }
-  }
-  // Click on Checkout button
-  await checkout.click();
-  await page.getByText(' Payment Method ').waitFor();
-
-  // Verify email details
-  expect(await emailText.textContent()).toBe(email);
-  // Filling up payment details
-  await expiryMonth.selectOption('10');
-  await expiryDate.selectOption('25');
-  await cardName.fill('Manjuk Hossain');
-  await cvv.fill('654');
-  await coupon.fill('rahylshettyacademy');
-  // await applyCoupon.click();
-
-  // Filling up shipping address
-  await countryType.pressSequentially('ind');
-  await countryOptions.waitFor();
-  const countryOptionsCount = await countryOptions.locator('button').count();
-  for (let i = 0; i < countryOptionsCount; i++) {
-    if (
-      (await countryOptions.locator('button').nth(i).textContent()) === ' India'
-    ) {
-      await countryOptions.locator('button').nth(i).click();
-      break;
-    }
-  }
-  await placeOrder.click();
-  await expect(thankYouMessage).toHaveText(' Thankyou for the order. ');
-  const exactOrderNumer = (await orderNumber.textContent())
-    .split('|')
-    .join('')
-    .trim();
-  console.log(exactOrderNumer);
   await ordersTab.click();
   await ordersPage.waitFor();
   await expect(ordersPage).toHaveText('Your Orders');
@@ -157,5 +125,5 @@ test('Add a product to cart', async ({ page }) => {
     }
   }
   await orderSummary.waitFor();
-  await expect(orderNumberinSummary).toHaveText(exactOrderNumer); */
+  await expect(orderNumberinSummary).toHaveText(exactOrderNumer);
 });
