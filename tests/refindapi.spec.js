@@ -7,12 +7,10 @@ let token;
 test.beforeAll(async () => {
   apiContext = await request.newContext();
   apiUtils = new ApiUtils(apiContext);
-
   token = await apiUtils.getToken(expect);
   console.log(token);
+
   // Adding a Product to Cart
-  const addtoCartUrl =
-    'https://rahulshettyacademy.com/api/ecom/user/add-to-cart';
   const productDetails = {
     _id: '67d70135c019fb1ad62940b1',
     product: {
@@ -31,16 +29,7 @@ test.beforeAll(async () => {
       productAddedBy: 'admin@gmail.com',
     },
   };
-
-  const addToCartRes = await apiContext.post(addtoCartUrl, {
-    data: productDetails,
-    headers: {
-      Authorization: `${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-  expect(addToCartRes.ok()).toBeTruthy();
-  const addToCart = await addToCartRes.json();
+  const addToCart = await apiUtils.addProductToCart(productDetails, expect);
   expect(addToCart.message).toBe('Product Added To Cart');
 });
 

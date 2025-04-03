@@ -14,6 +14,20 @@ class ApiUtils {
     const responseBody = await response.json();
     return responseBody.token;
   }
+
+  async addProductToCart(productDetails, expect) {
+    const addtoCartUrl =
+      'https://rahulshettyacademy.com/api/ecom/user/add-to-cart';
+    const addToCartRes = await this.apiContext.post(addtoCartUrl, {
+      data: productDetails,
+      headers: {
+        Authorization: await this.getToken(expect),
+        'Content-Type': 'application/json',
+      },
+    });
+    expect(addToCartRes.ok()).toBeTruthy();
+    return await addToCartRes.json();
+  }
 }
 
 module.exports = ApiUtils;
