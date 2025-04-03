@@ -13,6 +13,7 @@
     "calender": " npx playwright test calender.spec.js --headed",
     "morecheck": " npx playwright test morevalidation.spec.js --headed",
     "apicheck": " npx playwright test webapipart1.spec.js --headed",
+    "refineapi": " npx playwright test refindapi.spec.js --headed",
     "practiceDebug": " npx playwright test uiBasicsTest.spec.js --debug",
     "firefox": " npx playwright test --headed --browser=firefox"
   },
