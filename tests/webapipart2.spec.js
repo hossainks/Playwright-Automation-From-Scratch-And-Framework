@@ -1,11 +1,14 @@
 const { test, expect } = require('@playwright/test');
 
+let webContext;
+let email = 'manjuk.hossainown@gmail.com';
+
 test.beforeAll(async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
   await page.goto('https://rahulshettyacademy.com/client');
   await page.waitForLoadState('domcontentloaded');
-  const email = 'manjuk.hossainown@gmail.com';
+
   const userNmae = page.locator('[formcontrolname="userEmail"]');
   const password = page.locator('[type="password"]');
   const signIn = page.locator('#login');
@@ -14,11 +17,16 @@ test.beforeAll(async ({ browser }) => {
   await password.fill('KhaTest123456%');
   await signIn.click();
   await page.waitForLoadState('networkidle');
-
   await context.storageState({ path: 'state.json' });
+  await context.close();
+
+  webContext = await browser.newContext({ storageState: 'state.json' });
 });
 
-test.only('Add a product to cart', async ({ page }) => {
+test('Add a product to cart', async () => {
+  const page = await webContext.newPage();
+  await page.goto('https://rahulshettyacademy.com/client');
+  await page.waitForLoadState('domcontentloaded');
   const products = page.locator('.card-body');
   const cardTitles = page.locator('.card-body b');
   const productName = 'ADIDAS ORIGINAL';
@@ -118,4 +126,10 @@ test.only('Add a product to cart', async ({ page }) => {
   }
   await orderSummary.waitFor();
   await expect(orderNumberinSummary).toHaveText(exactOrderNumer);
+});
+
+test('Test 2', async () => {
+  const page = await webContext.newPage();
+  await page.goto('https://rahulshettyacademy.com/client');
+  await page.waitForLoadState('domcontentloaded');
 });
