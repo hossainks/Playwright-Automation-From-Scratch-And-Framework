@@ -14,6 +14,7 @@
     "morecheck": " npx playwright test morevalidation.spec.js --headed",
     "apicheck": " npx playwright test webapipart1.spec.js --headed",
     "refineapi": " npx playwright test refindapi.spec.js --headed",
+    "networktest": " npx playwright test networktest.spec.js --headed",
     "refineapi2": " npx playwright test webapipart2.spec.js --headed",
     "practiceDebug": " npx playwright test uiBasicsTest.spec.js --debug",
     "firefox": " npx playwright test --headed --browser=firefox"
