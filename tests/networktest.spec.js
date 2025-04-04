@@ -3,6 +3,7 @@ const ApiUtils = require('../utils/apiutils');
 
 let apiUtils;
 let apiContext;
+let fakeResponse = { data: [], message: 'No Orders' };
 
 const loginPayload = {
   userEmail: 'manjuk.hossainown@gmail.com',
@@ -46,6 +47,7 @@ test('Add a product to cart', async ({ page }) => {
   //Locators
   // Orders page
   const ordersPage = page.locator('h1.ng-star-inserted');
+  const noOrdrs = page.locator('.mt-4');
   // Place order
   const ordersTab = page.locator("button[routerlink*='myorders']");
 
@@ -63,7 +65,24 @@ test('Add a product to cart', async ({ page }) => {
   const exactOrderNumer = makeOrder.orders[0];
   console.log(makeOrder.orders[0]);
 
+  await page.route(
+    'https://rahulshettyacademy.com/api/ecom/order/get-orders-for-customer/67d70135c019fb1ad62940b1',
+    async (route) => {
+      const response = await page.request.fetch(route.request());
+      route.fulfill({
+        status: 200, // Ensure it's a success response
+        contentType: 'application/json',
+        body: JSON.stringify(fakeResponse),
+      });
+    }
+  );
+  await page.goto('https://rahulshettyacademy.com/client');
   await ordersTab.click();
-  await ordersPage.waitFor();
-  await expect(ordersPage).toHaveText('Your Orders');
+
+  await noOrdrs.waitFor();
+  await expect(noOrdrs).toHaveText(
+    ' You have No Orders to show at this time. Please Visit Back Us '
+  );
+
+  await page.waitForTimeout(10000);
 });
