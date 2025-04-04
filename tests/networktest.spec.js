@@ -76,7 +76,7 @@ test('Add a product to cart', async ({ page }) => {
       });
     }
   );
-  await page.goto('https://rahulshettyacademy.com/client');
+
   await ordersTab.click();
 
   await noOrdrs.waitFor();
