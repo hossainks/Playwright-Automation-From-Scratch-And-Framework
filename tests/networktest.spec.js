@@ -78,7 +78,7 @@ test('Add a product to cart', async ({ page }) => {
   );
 
   await ordersTab.click();
-
+  await page.waitForResponse('**/api/ecom/order/get-orders-for-customer/*');
   await noOrdrs.waitFor();
   await expect(noOrdrs).toHaveText(
     ' You have No Orders to show at this time. Please Visit Back Us '
