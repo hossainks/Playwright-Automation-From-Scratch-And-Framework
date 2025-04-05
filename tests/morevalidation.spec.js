@@ -16,7 +16,7 @@ test('Popup Valiadation', async ({ page }) => {
   await page.goForward();
 });
 
-test.only('Dialog Valiadation', async ({ page }) => {
+test('Dialog Valiadation', async ({ page }) => {
   const dialogText = page.locator('#confirmbtn');
   page.goto('https://rahulshettyacademy.com/AutomationPractice/');
   page.on('dialog', async (dialog) => {
@@ -27,4 +27,27 @@ test.only('Dialog Valiadation', async ({ page }) => {
   const hoverbutton = page.locator('#mousehover');
   await hoverbutton.hover();
   await page.waitForTimeout(5000);
+});
+
+test('Screenshot and Visual Validation', async ({ page }) => {
+  // Locators for the elements
+  const visibleText = page.locator('#displayed-text');
+  const hideButton = page.locator('#hide-textbox');
+  page.goto('https://rahulshettyacademy.com/AutomationPractice/');
+
+  await visibleText.screenshot({ path: 'images/visibleText.png' });
+  await page
+    .locator('fieldset')
+    .nth(8)
+    .screenshot({ path: 'images/fieldSet.png' });
+  await expect(visibleText).toBeVisible();
+  await hideButton.click();
+
+  await page.screenshot({ path: 'images/screenshot.png' });
+  await expect(visibleText).not.toBeVisible();
+});
+
+test.only('Visual Validation', async ({ page }) => {
+  await page.goto('https://rahulshettyacademy.com/angularpractice/');
+  expect(await page.screenshot()).toMatchSnapshot('landing.png');
 });
