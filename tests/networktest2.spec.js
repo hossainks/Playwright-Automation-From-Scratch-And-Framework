@@ -3,6 +3,7 @@ const ApiUtils = require('../utils/apiutils');
 
 let apiUtils;
 let apiContext;
+let fakeResponse = { data: [], message: 'No Orders' };
 
 const loginPayload = {
   userEmail: 'manjuk.hossainown@gmail.com',
@@ -44,22 +45,15 @@ test.beforeAll(async () => {
 
 test('Add a product to cart', async ({ page }) => {
   //Locators
-  const email = 'manjuk.hossainown@gmail.com';
-  const emailText = page.locator("label[type='text']");
-
-  const productName = 'ADIDAS ORIGINAL';
-  const cart = page.locator("[routerlink*='cart']");
-  const productNameonCart = page.locator("[class='cartSection'] h3");
-  const checkout = page.locator("li[class='totalRow'] button");
-
   // Orders page
   const ordersPage = page.locator('h1.ng-star-inserted');
-  const allOrders = page.locator('tbody');
-  const orderSummary = page.locator('.email-title');
-  const orderNumberinSummary = page.locator('.-main');
-
+  const noOrdrs = page.locator('.mt-4');
   // Place order
   const ordersTab = page.locator("button[routerlink*='myorders']");
+
+  // View orders
+  const viewOrders = page.locator("td button[class*='btn-primary']");
+  const orderSummary = page.locator('.email-title');
 
   // Actual Test
   page.addInitScript((value) => {
@@ -71,35 +65,25 @@ test('Add a product to cart', async ({ page }) => {
   const addToCart = await apiUtils.addProductToCart(productDetails, expect);
   expect(addToCart.message).toBe('Product Added To Cart');
 
-  await cart.click();
-  expect(await productNameonCart.last().textContent()).toBe(productName);
-  expect(
-    await page.locator("h3:has-text('ADIDAS ORIGINAL')").isVisible()
-  ).toBeTruthy();
-
-  await checkout.click();
-  await page.getByText(' Payment Method ').waitFor();
-
-  // Verify email details
-  expect(await emailText.textContent()).toBe(email);
-
   const makeOrder = await apiUtils.createOrder(orderPayload, expect);
   const exactOrderNumer = makeOrder.orders[0];
   console.log(makeOrder.orders[0]);
 
   await ordersTab.click();
   await ordersPage.waitFor();
-  await expect(ordersPage).toHaveText('Your Orders');
 
-  const ordersCount = await allOrders.locator('tr').count();
-  for (let i = 0; i < ordersCount; i++) {
-    if (
-      (await allOrders.locator('th').nth(i).textContent()) === exactOrderNumer
-    ) {
-      await allOrders.locator('td button.btn-primary').nth(i).click();
-      break;
+  // Intercept
+  await page.route(
+    '**/api/ecom/order/get-orders-details?id=*',
+    async (route) => {
+      route.continue({
+        url: 'https://rahulshettyacademy.com/api/ecom/order/get-orders-details?id=621661b0d3e6622a297ccb',
+      });
     }
-  }
-  await orderSummary.waitFor();
-  await expect(orderNumberinSummary).toHaveText(exactOrderNumer);
+  );
+
+  await viewOrders.nth(0).click();
+  expect(await page.locator('.blink_me').textContent()).toEqual(
+    'You are not authorize to view this order'
+  );
 });
