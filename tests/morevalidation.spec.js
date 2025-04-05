@@ -30,10 +30,19 @@ test('Dialog Valiadation', async ({ page }) => {
 });
 
 test.only('Screenshot and Visual Validation', async ({ page }) => {
+  // Locators for the elements
+  const visibleText = page.locator('#displayed-text');
+  const hideButton = page.locator('#hide-textbox');
   page.goto('https://rahulshettyacademy.com/AutomationPractice/');
-  await expect(page.locator('#displayed-text')).toBeVisible();
-  await page.locator('#hide-textbox').click();
+
+  await visibleText.screenshot({ path: 'images/visibleText.png' });
+  await page
+    .locator('fieldset')
+    .nth(8)
+    .screenshot({ path: 'images/fieldSet.png' });
+  await expect(visibleText).toBeVisible();
+  await hideButton.click();
 
   await page.screenshot({ path: 'images/screenshot.png' });
-  await expect(page.locator('#displayed-text')).not.toBeVisible();
+  await expect(visibleText).not.toBeVisible();
 });
