@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const { ok } = require('assert');
 
-test('Login as User with Valid Credentials', async ({ browser }) => {
+test.only('Login as User with Valid Credentials', async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
   await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
@@ -128,4 +128,53 @@ test(' Child Window', async ({ browser }) => {
   await userNmae.fill(email);
 
   await newPage.waitForTimeout(5000);
+});
+
+test('Abort Testing', async ({ browser }) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+
+  await page.route('**/*.css', (route) => {
+    route.abort();
+  });
+
+  await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
+  const userNmae = page.locator('#username');
+  const password = page.locator('input#password');
+  const signIn = page.locator('[id="signInBtn"]');
+  const cardTitles = page.locator('.card-title a');
+
+  const title = await page.title();
+  console.log(title);
+
+  await page.route('**/*', (route) => {
+    const request = route.request();
+    if (request.url().includes('.jpg')) {
+      route.abort();
+    } else {
+      route.continue();
+    }
+  });
+
+  page.on('request', (request) => {
+    console.log(`Request: ${request.method()} ${request.url()}`);
+  });
+  page.on('response', (response) => {
+    console.log(`Response: ${response.url()} ` + response.status());
+  });
+
+  await userNmae.fill('rahulshettyacademy');
+  await password.fill('learning');
+  await signIn.click();
+
+  await page.route('**/*.{jpg}', (route) => {
+    route.abort();
+  });
+
+  await page.waitForLoadState('domcontentloaded');
+  await expect(page).toHaveTitle('ProtoCommerce');
+  await expect(cardTitles.first()).toContainText('iphone X');
+  await expect(cardTitles.nth(1)).toContainText('Samsung Note 8');
+  console.log(await cardTitles.allTextContents());
+  await page.waitForTimeout(5000);
 });
