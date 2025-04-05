@@ -16,7 +16,7 @@ test('Popup Valiadation', async ({ page }) => {
   await page.goForward();
 });
 
-test.only('Dialog Valiadation', async ({ page }) => {
+test('Dialog Valiadation', async ({ page }) => {
   const dialogText = page.locator('#confirmbtn');
   page.goto('https://rahulshettyacademy.com/AutomationPractice/');
   page.on('dialog', async (dialog) => {
@@ -27,4 +27,13 @@ test.only('Dialog Valiadation', async ({ page }) => {
   const hoverbutton = page.locator('#mousehover');
   await hoverbutton.hover();
   await page.waitForTimeout(5000);
+});
+
+test.only('Screenshot and Visual Validation', async ({ page }) => {
+  page.goto('https://rahulshettyacademy.com/AutomationPractice/');
+  await expect(page.locator('#displayed-text')).toBeVisible();
+  await page.locator('#hide-textbox').click();
+
+  await page.screenshot({ path: 'images/screenshot.png' });
+  await expect(page.locator('#displayed-text')).not.toBeVisible();
 });
