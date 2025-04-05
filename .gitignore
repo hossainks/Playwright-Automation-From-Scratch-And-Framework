@@ -6,3 +6,4 @@ node_modules/
 /UserLogin.txt
 /state.json
 images/
+tests/morevalidation.spec.js-snapshots

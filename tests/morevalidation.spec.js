@@ -29,7 +29,7 @@ test('Dialog Valiadation', async ({ page }) => {
   await page.waitForTimeout(5000);
 });
 
-test.only('Screenshot and Visual Validation', async ({ page }) => {
+test('Screenshot and Visual Validation', async ({ page }) => {
   // Locators for the elements
   const visibleText = page.locator('#displayed-text');
   const hideButton = page.locator('#hide-textbox');
@@ -45,4 +45,9 @@ test.only('Screenshot and Visual Validation', async ({ page }) => {
 
   await page.screenshot({ path: 'images/screenshot.png' });
   await expect(visibleText).not.toBeVisible();
+});
+
+test.only('Visual Validation', async ({ page }) => {
+  await page.goto('https://rahulshettyacademy.com/angularpractice/');
+  expect(await page.screenshot()).toMatchSnapshot('landing.png');
 });
