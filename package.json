@@ -16,6 +16,7 @@
     "refineapi": " npx playwright test refindapi.spec.js --headed",
     "networktest": " npx playwright test networktest.spec.js --headed",
     "networktest2": " npx playwright test networktest2.spec.js --headed",
+    "exceltest": " npx playwright test uploadDownload.spec.js --headed",
     "refineapi2": " npx playwright test webapipart2.spec.js --headed",
     "practiceDebug": " npx playwright test uiBasicsTest.spec.js --debug",
     "firefox": " npx playwright test --headed --browser=firefox"
@@ -26,6 +27,7 @@
   "description": "",
   "devDependencies": {
     "@playwright/test": "^1.51.0",
-    "@types/node": "^22.13.10"
+    "@types/node": "^22.13.10",
+    "exceljs": "^4.4.0"
   }
 }

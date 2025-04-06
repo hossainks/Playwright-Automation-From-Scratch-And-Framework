@@ -1,3 +1,5 @@
+const { test, expect } = require('@playwright/test');
+
 const ExcelJS = require('exceljs');
 
 async function readExcel(sheet, searchText) {
@@ -40,5 +42,26 @@ async function processExcel(filePath, searchText, targetText, change) {
   const output = await readExcel(workSheet, searchText);
   await updateExcel(workSheet, workbook, output, targetText, filePath, change);
 }
+// processExcel('download.xlsx', 'Mango', 350, { changeRow: 0, changeCol: 2 });
 
-processExcel('download.xlsx', 'Mango', 350, { changeRow: 0, changeCol: 2 });
+test('Download and Upload Execl', async ({ page }) => {
+  await page.goto(
+    'https://rahulshettyacademy.com/upload-download-test/index.html'
+  );
+  const downloadPromise = page.waitForEvent('download');
+
+  const downloadButton = page.locator('#downloadButton');
+  const chooseFileButton = page.locator('#fileinput');
+
+  await downloadButton.click();
+  const download = await downloadPromise;
+  const filePath = 'C:/Users/DexFn/Downloads/download.xlsx';
+  await download.saveAs(filePath);
+
+  await processExcel(filePath, 'Mango', 350, {
+    changeRow: 0,
+    changeCol: 2,
+  });
+  await chooseFileButton.click();
+  await chooseFileButton.setInputFiles(filePath);
+});
