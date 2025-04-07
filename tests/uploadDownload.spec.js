@@ -27,7 +27,6 @@ async function updateExcel(
     const cell = workSheet.getCell(output.row, output.col + change.changeCol);
     cell.value = targetText;
     await workbook.xlsx.writeFile(filePath);
-    console.log('Updated successfully!');
   } else {
     console.log(`Targeted cell not found in the sheet.`);
   }
@@ -45,6 +44,7 @@ async function processExcel(filePath, searchText, targetText, change) {
 // processExcel('download.xlsx', 'Mango', 350, { changeRow: 0, changeCol: 2 });
 
 test('Download and Upload Execl', async ({ page }) => {
+  const textSeatch = 'Mango';
   await page.goto(
     'https://rahulshettyacademy.com/upload-download-test/index.html'
   );
@@ -58,10 +58,16 @@ test('Download and Upload Execl', async ({ page }) => {
   const filePath = 'C:/Users/DexFn/Downloads/download.xlsx';
   await download.saveAs(filePath);
 
-  await processExcel(filePath, 'Mango', 350, {
+  await processExcel(filePath, textSeatch, 350, {
     changeRow: 0,
     changeCol: 2,
   });
   await chooseFileButton.click();
   await chooseFileButton.setInputFiles(filePath);
+
+  const fruitName = page.getByText(textSeatch);
+  const selectedRow = page.getByRole('row', { name: textSeatch });
+  const selectPrice = selectedRow.locator('#cell-4-undefined');
+
+  expect(await selectPrice.textContent()).toBe('350');
 });
