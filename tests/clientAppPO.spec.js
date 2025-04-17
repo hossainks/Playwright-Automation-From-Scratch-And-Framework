@@ -6,15 +6,11 @@ test.only('Login as User with Valid Credentials', async ({ page }) => {
     password = 'KhaTest123456%';
   const loginPage = new LoginPage(page);
   await loginPage.goTo();
-
+  await loginPage.validateLogin(username, password);
   const cardTitles = page.locator('.card-body b');
-  loginPage.validateLogin(username, password);
 
   await page.waitForLoadState('domcontentloaded');
   await cardTitles.first().waitFor();
-  //await expect(page).toHaveTitle("Let's Shop");
-  //await expect(cardTitles.first()).toContainText('ZARA COAT 3');
-  //await expect(cardTitles.nth(1)).toContainText('Samsung Note 8');
   console.log(await cardTitles.allTextContents());
 });
 
