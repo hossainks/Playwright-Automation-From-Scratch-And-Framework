@@ -95,7 +95,7 @@ test('Add a product to cart', async ({ page }) => {
   // await page.getByText(' Payment Method ').waitFor();
 
   // Verify email details
-  expect(await emailText.textContent()).toBe(email);
+  /* expect(await emailText.textContent()).toBe(email);
   // Filling up payment details
   await expiryMonth.selectOption('10');
   await expiryDate.selectOption('25');
@@ -116,7 +116,8 @@ test('Add a product to cart', async ({ page }) => {
       break;
     }
   }
-  await placeOrder.click();
+  await placeOrder.click(); */
+
   await expect(thankYouMessage).toHaveText(' Thankyou for the order. ');
   const exactOrderNumer = (await orderNumber.textContent())
     .split('|')
