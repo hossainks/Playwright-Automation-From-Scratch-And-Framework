@@ -43,22 +43,22 @@ test('Add a product to cart', async ({ page }) => {
   // const checkout = page.locator("li[class='totalRow'] button");
 
   // slectore for payment method
-  const expiryMonth = page.locator('select.input.ddl').nth(0);
-  const expiryDate = page.locator('select.input.ddl').nth(1);
-  const cvv = page.locator("div.field.small input[class='input txt']");
-  const cardName = page.locator("input[class='input txt']").last();
-  const coupon = page.locator("input[name='coupon']");
-  const applyCoupon = page.locator("button[type='submit']");
+  // const expiryMonth = page.locator('select.input.ddl').nth(0);
+  // const expiryDate = page.locator('select.input.ddl').nth(1);
+  // const cvv = page.locator("div.field.small input[class='input txt']");
+  // const cardName = page.locator("input[class='input txt']").last();
+  // const coupon = page.locator("input[name='coupon']");
+  // const applyCoupon = page.locator("button[type='submit']");
 
-  // selector for shipping address
-  const countryType = page.locator("[placeholder*='Country']");
-  const countryOptions = page.locator("[class*='ta-results']");
+  // // selector for shipping address
+  // const countryType = page.locator("[placeholder*='Country']");
+  // const countryOptions = page.locator("[class*='ta-results']");
 
-  // Email Details
-  const emailText = page.locator("label[type='text']");
+  // // Email Details
+  // const emailText = page.locator("label[type='text']");
 
-  // Place order
-  const placeOrder = page.locator('.action__submit');
+  // // Place order
+  // const placeOrder = page.locator('.action__submit');
 
   const thankYouMessage = page.locator('h1.hero-primary');
   const orderNumber = page.locator("label[class*='ng-star']");
