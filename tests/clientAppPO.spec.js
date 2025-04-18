@@ -2,15 +2,16 @@ const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../page-objects/loginPage');
 const { DashboardPage } = require('../page-objects/DashboardPage');
 const { CheckoutPage } = require('../page-objects/CheckoutPage');
+const { PlaceorderPage } = require('../page-objects/PlaceorderPage');
 
 test.only('Login as User with Valid Credentials', async ({ page }) => {
-  const username = 'manjuk.hossainown@gmail.com',
+  const email = 'manjuk.hossainown@gmail.com',
     password = 'KhaTest123456%';
   const productName = 'ADIDAS ORIGINAL';
 
   const loginPage = new LoginPage(page);
   await loginPage.goTo();
-  await loginPage.validateLogin(username, password);
+  await loginPage.validateLogin(email, password);
 
   const dashboard = new DashboardPage(page);
   await dashboard.searchProductAddCart(productName);
@@ -19,6 +20,12 @@ test.only('Login as User with Valid Credentials', async ({ page }) => {
   const checkoutPage = new CheckoutPage(page, expect);
   await checkoutPage.verifyCart(productName);
   await checkoutPage.navigateToPlaceOrder();
+
+  const placeOrderPage = new PlaceorderPage(page, expect);
+  await placeOrderPage.verifyEmail(email);
+  await placeOrderPage.fillPaymentDetails();
+  await placeOrderPage.fillShippingAddress();
+  await placeOrderPage.submitOrder();
 });
 
 test('Add a product to cart', async ({ page }) => {
@@ -52,6 +59,7 @@ test('Add a product to cart', async ({ page }) => {
 
   // Place order
   const placeOrder = page.locator('.action__submit');
+
   const thankYouMessage = page.locator('h1.hero-primary');
   const orderNumber = page.locator("label[class*='ng-star']");
   const ordersTab = page.locator("button[routerlink*='myorders']");
@@ -83,8 +91,8 @@ test('Add a product to cart', async ({ page }) => {
   ).toBeTruthy(); */
 
   // Click on Checkout button
-  await checkout.click();
-  await page.getByText(' Payment Method ').waitFor();
+  // await checkout.click();
+  // await page.getByText(' Payment Method ').waitFor();
 
   // Verify email details
   expect(await emailText.textContent()).toBe(email);
