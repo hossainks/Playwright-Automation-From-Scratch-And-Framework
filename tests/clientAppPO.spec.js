@@ -1,32 +1,39 @@
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../page-objects/loginPage');
+const { DashboardPage } = require('../page-objects/DashboardPage');
+const { CheckoutPage } = require('../page-objects/CheckoutPage');
 
 test.only('Login as User with Valid Credentials', async ({ page }) => {
   const username = 'manjuk.hossainown@gmail.com',
     password = 'KhaTest123456%';
+  const productName = 'ADIDAS ORIGINAL';
+
   const loginPage = new LoginPage(page);
   await loginPage.goTo();
   await loginPage.validateLogin(username, password);
-  const cardTitles = page.locator('.card-body b');
 
-  await page.waitForLoadState('domcontentloaded');
-  await cardTitles.first().waitFor();
-  console.log(await cardTitles.allTextContents());
+  const dashboard = new DashboardPage(page);
+  await dashboard.searchProductAddCart(productName);
+  await dashboard.navigateToCart();
+
+  const checkoutPage = new CheckoutPage(page, expect);
+  await checkoutPage.verifyCart(productName);
+  await checkoutPage.navigateToPlaceOrder();
 });
 
 test('Add a product to cart', async ({ page }) => {
-  await page.goto('https://rahulshettyacademy.com/client');
-  await page.waitForLoadState('domcontentloaded');
-  const email = 'manjuk.hossainown@gmail.com';
-  const userNmae = page.locator('[formcontrolname="userEmail"]');
-  const password = page.locator('[type="password"]');
-  const signIn = page.locator('#login');
-  const products = page.locator('.card-body');
-  const cardTitles = page.locator('.card-body b');
-  const productName = 'ADIDAS ORIGINAL';
-  const cart = page.locator("[routerlink*='cart']");
-  const productNameonCart = page.locator("[class='cartSection'] h3");
-  const checkout = page.locator("li[class='totalRow'] button");
+  // await page.goto('https://rahulshettyacademy.com/client');
+  // await page.waitForLoadState('domcontentloaded');
+  // const email = 'manjuk.hossainown@gmail.com';
+  // const userNmae = page.locator('[formcontrolname="userEmail"]');
+  // const password = page.locator('[type="password"]');
+  // const signIn = page.locator('#login');
+  //const products = page.locator('.card-body');
+  // const cardTitles = page.locator('.card-body b');
+
+  // const cart = page.locator("[routerlink*='cart']");
+  // const productNameonCart = page.locator("[class='cartSection'] h3");
+  // const checkout = page.locator("li[class='totalRow'] button");
 
   // slectore for payment method
   const expiryMonth = page.locator('select.input.ddl').nth(0);
@@ -55,11 +62,11 @@ test('Add a product to cart', async ({ page }) => {
   const orderSummary = page.locator('.email-title');
   const orderNumberinSummary = page.locator('.-main');
 
-  await userNmae.fill(email);
-  await password.fill('KhaTest123456%');
-  await signIn.click();
+  // await userNmae.fill(email);
+  // await password.fill('KhaTest123456%');
+  // await signIn.click();
   // await page.waitForLoadState('networkidle');
-  await cardTitles.first().waitFor();
+  /*   await cardTitles.first().waitFor();
 
   for (let i = 0; i < (await products.count()); i++) {
     if ((await products.nth(i).locator('b').textContent()) === productName) {
@@ -73,7 +80,7 @@ test('Add a product to cart', async ({ page }) => {
   expect(await productNameonCart.last().textContent()).toBe(productName);
   expect(
     await page.locator("h3:has-text('ADIDAS ORIGINAL')").isVisible()
-  ).toBeTruthy();
+  ).toBeTruthy(); */
 
   // Click on Checkout button
   await checkout.click();

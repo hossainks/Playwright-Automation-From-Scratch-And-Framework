@@ -15,6 +15,7 @@ class LoginPage {
     await this.username.fill(username);
     await this.password.fill(password);
     await this.signIn.click();
+    await this.page.waitForLoadState('domcontentloaded');
   }
 }
 
