@@ -3,6 +3,7 @@ const { LoginPage } = require('../page-objects/loginPage');
 const { DashboardPage } = require('../page-objects/DashboardPage');
 const { CheckoutPage } = require('../page-objects/CheckoutPage');
 const { PlaceorderPage } = require('../page-objects/PlaceorderPage');
+const { ThankYouPage } = require('../page-objects/ThankYouPage');
 
 test.only('Login as User with Valid Credentials', async ({ page }) => {
   const email = 'manjuk.hossainown@gmail.com',
@@ -26,6 +27,12 @@ test.only('Login as User with Valid Credentials', async ({ page }) => {
   await placeOrderPage.fillPaymentDetails();
   await placeOrderPage.fillShippingAddress();
   await placeOrderPage.submitOrder();
+
+  const thankYouPage = new ThankYouPage(page, expect);
+  await thankYouPage.verifThankYou();
+  const exactOrderNumer = await thankYouPage.getOrderId();
+  console.log(exactOrderNumer);
+  await thankYouPage.navigateToMyOrders();
 });
 
 test('Add a product to cart', async ({ page }) => {
@@ -60,9 +67,9 @@ test('Add a product to cart', async ({ page }) => {
   // // Place order
   // const placeOrder = page.locator('.action__submit');
 
-  const thankYouMessage = page.locator('h1.hero-primary');
-  const orderNumber = page.locator("label[class*='ng-star']");
-  const ordersTab = page.locator("button[routerlink*='myorders']");
+  // const thankYouMessage = page.locator('h1.hero-primary');
+  // const orderNumber = page.locator("label[class*='ng-star']");
+  // const ordersTab = page.locator("button[routerlink*='myorders']");
 
   // Orders page
   const ordersPage = page.locator('h1.ng-star-inserted');
@@ -118,13 +125,14 @@ test('Add a product to cart', async ({ page }) => {
   }
   await placeOrder.click(); */
 
-  await expect(thankYouMessage).toHaveText(' Thankyou for the order. ');
-  const exactOrderNumer = (await orderNumber.textContent())
-    .split('|')
-    .join('')
-    .trim();
-  console.log(exactOrderNumer);
-  await ordersTab.click();
+  // await expect(thankYouMessage).toHaveText(' Thankyou for the order. ');
+  // const exactOrderNumer = (await orderNumber.textContent())
+  //   .split('|')
+  //   .join('')
+  //   .trim();
+  // console.log(exactOrderNumer);
+  // await ordersTab.click();
+
   await ordersPage.waitFor();
   await expect(ordersPage).toHaveText('Your Orders');
 
