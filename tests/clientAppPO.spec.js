@@ -4,6 +4,7 @@ const { DashboardPage } = require('../page-objects/DashboardPage');
 const { CheckoutPage } = require('../page-objects/CheckoutPage');
 const { PlaceorderPage } = require('../page-objects/PlaceorderPage');
 const { ThankYouPage } = require('../page-objects/ThankYouPage');
+const { OrdersPage } = require('../page-objects/OrdersPage');
 
 test.only('Login as User with Valid Credentials', async ({ page }) => {
   const email = 'manjuk.hossainown@gmail.com',
@@ -33,6 +34,11 @@ test.only('Login as User with Valid Credentials', async ({ page }) => {
   const exactOrderNumer = await thankYouPage.getOrderId();
   console.log(exactOrderNumer);
   await thankYouPage.navigateToMyOrders();
+
+  const ordersPage = new OrdersPage(page, expect);
+  await ordersPage.verifyOrdersPage();
+  await ordersPage.clickOnOrder(exactOrderNumer);
+  await ordersPage.verifyOrder(exactOrderNumer);
 });
 
 test('Add a product to cart', async ({ page }) => {
