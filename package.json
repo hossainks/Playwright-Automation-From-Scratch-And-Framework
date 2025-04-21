@@ -8,6 +8,8 @@
     "clientApp": " npx playwright test clientApp.spec.js --headed",
     "clientpo": " npx playwright test clientAppPO.spec.js --headed",
     "clientpoManager": " npx playwright test clientAppPOManager.spec.js --headed",
+    "pomanagerDataDriven": " npx playwright test poManagerDataDriven.spec.js --headed",
+    "pomanagerParameter": " npx playwright test poManagerParameterized.spec.js --headed",
     "clientAppOthers": " npx playwright test clientAppOthers.spec.js --headed",
     "practiseApp": " npx playwright test uiBasicsTest.spec.js --headed",
     "angularApp": " npx playwright test angularpractice.spec.js",
