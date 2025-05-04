@@ -25,7 +25,8 @@
     "practiceDebug": " npx playwright test uiBasicsTest.spec.js --debug",
     "firefox": " npx playwright test --headed --browser=firefox",
     "customConfigrun": " npx playwright test clientAppPOManager.spec.js --config playwright.config1.js --headed",
-    "customConfigProject": " npx playwright test clientAppPOManager.spec.js --config playwright.config1.js --project=Run-on-Chrome --headed"
+    "customConfigProject": " npx playwright test clientAppPOManager.spec.js --config playwright.config1.js --project=Run-on-Chrome --headed",
+    "customConfigiPhone": " npx playwright test clientAppPOManager.spec.js --config playwright.config1.js --project=Run-on-Safari --headed"
   },
   "keywords": [],
   "author": "",
