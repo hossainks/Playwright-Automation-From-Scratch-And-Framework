@@ -7,3 +7,5 @@ node_modules/
 /state.json
 images/
 tests/morevalidation.spec.js-snapshots
+allure-results/
+allure-report/
