@@ -23,7 +23,8 @@
     "exceltest": " npx playwright test uploadDownload.spec.js --headed",
     "refineapi2": " npx playwright test webapipart2.spec.js --headed",
     "practiceDebug": " npx playwright test uiBasicsTest.spec.js --debug",
-    "firefox": " npx playwright test --headed --browser=firefox"
+    "firefox": " npx playwright test --headed --browser=firefox",
+    "customConfigrun": " npx playwright test clientAppPOManager.spec.js --config playwright.config1.js --headed"
   },
   "keywords": [],
   "author": "",
