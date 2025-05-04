@@ -11,7 +11,7 @@ module.exports = defineConfig({
   expect: {
     timeout: 5000,
   },
-  reporter: 'html',
+  reporter: 'allure-playwright',
   projects: [
     {
       name: 'Run-on-Safari',

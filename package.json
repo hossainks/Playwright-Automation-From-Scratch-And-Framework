@@ -26,7 +26,10 @@
     "firefox": " npx playwright test --headed --browser=firefox",
     "customConfigrun": " npx playwright test clientAppPOManager.spec.js --config playwright.config1.js --headed",
     "customConfigProject": " npx playwright test clientAppPOManager.spec.js --config playwright.config1.js --project=Run-on-Chrome --headed",
-    "customConfigiPhone": " npx playwright test clientAppPOManager.spec.js --config playwright.config1.js --project=Run-on-Safari --headed"
+    "customConfigiPhone": " npx playwright test clientAppPOManager.spec.js --config playwright.config1.js --project=Run-on-Safari --headed",
+    "alluretest": " npx playwright test --reporter=line,allure-playwright",
+    "allureGenerate": "npx allure generate ./allure-results -o ./allure-report",
+    "allureOpen": "npx allure open ./allure-report"
   },
   "keywords": [],
   "author": "",
@@ -35,6 +38,7 @@
   "devDependencies": {
     "@playwright/test": "^1.51.0",
     "@types/node": "^22.13.10",
+    "allure-playwright": "^3.2.1",
     "exceljs": "^4.4.0"
   }
 }
