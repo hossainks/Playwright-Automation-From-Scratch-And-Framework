@@ -11,11 +11,24 @@ module.exports = defineConfig({
     timeout: 5000,
   },
   reporter: 'html',
-  use: {
-    browserName: 'webkit',
-    headless: true,
-    screenshot: 'only-on-failure',
-    trace: 'retain-on-failure',
-    //trace: 'on',
-  },
+  projects: [
+    {
+      name: 'Run-on-Safari',
+      use: {
+        browserName: 'webkit',
+        headless: true,
+        screenshot: 'only-on-failure',
+        trace: 'on',
+      },
+    },
+    {
+      name: 'Run-on-Chrome',
+      use: {
+        browserName: 'chromium',
+        headless: true,
+        screenshot: 'on',
+        trace: 'on',
+      },
+    },
+  ],
 });
