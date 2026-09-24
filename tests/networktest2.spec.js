@@ -66,7 +66,7 @@ test('Add a product to cart', async ({ page }) => {
   expect(addToCart.message).toBe('Product Added To Cart');
 
   const makeOrder = await apiUtils.createOrder(orderPayload, expect);
-  const exactOrderNumer = makeOrder.orders[0];
+  const exactOrderNumber = makeOrder.orders[0];
   console.log(makeOrder.orders[0]);
 
   await ordersTab.click();

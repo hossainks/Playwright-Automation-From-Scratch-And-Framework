@@ -109,11 +109,11 @@ test.only("Add a product to cart", async ({ page }) => {
   }
   await placeOrder.click();
   await expect(thankYouMessage).toHaveText(" Thankyou for the order. ");
-  const exactOrderNumer = (await orderNumber.textContent())
+  const exactOrderNumber = (await orderNumber.textContent())
     .split("|")
     .join("")
     .trim();
-  console.log(exactOrderNumer);
+  console.log(exactOrderNumber);
   await ordersTab.click();
   await ordersPage.waitFor();
   await expect(ordersPage).toHaveText("Your Orders");
@@ -121,12 +121,12 @@ test.only("Add a product to cart", async ({ page }) => {
   const ordersCount = await allOrders.locator("tr").count();
   for (let i = 0; i < ordersCount; i++) {
     if (
-      (await allOrders.locator("th").nth(i).textContent()) === exactOrderNumer
+      (await allOrders.locator("th").nth(i).textContent()) === exactOrderNumber
     ) {
       await allOrders.locator("td button.btn-primary").nth(i).click();
       break;
     }
   }
   await orderSummary.waitFor();
-  await expect(orderNumberinSummary).toHaveText(exactOrderNumer);
+  await expect(orderNumberinSummary).toHaveText(exactOrderNumber);
 });

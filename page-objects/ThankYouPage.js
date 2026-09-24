@@ -6,7 +6,7 @@ class ThankYouPage {
     this.ordersTab = page.locator("button[routerlink*='myorders']");
   }
 
-  async verifThankYou() {
+  async verifyThankYou() {
     await this.expect(this.thankYouMessage).toHaveText(
       ' Thankyou for the order. '
     );

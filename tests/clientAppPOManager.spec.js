@@ -1,7 +1,9 @@
 const { test, expect } = require("@playwright/test");
 const { POManager } = require("../page-objects/POManager");
 
-test.only("Login as User with Valid Credentials", async ({ page }) => {
+test("Complete purchase flow from login to order confirmation", async ({
+  page,
+}) => {
   const email = process.env.TEST_USER_EMAIL,
     password = process.env.TEST_USER_PASSWORD;
   const productName = "ADIDAS ORIGINAL";
@@ -21,12 +23,12 @@ test.only("Login as User with Valid Credentials", async ({ page }) => {
   await poManager.getPlaceOrderPage().fillShippingAddress();
   await poManager.getPlaceOrderPage().submitOrder();
 
-  await poManager.getThankYouPage().verifThankYou();
-  const exactOrderNumer = await poManager.getThankYouPage().getOrderId();
-  console.log(exactOrderNumer);
+  await poManager.getThankYouPage().verifyThankYou();
+  const exactOrderNumber = await poManager.getThankYouPage().getOrderId();
+  console.log(exactOrderNumber);
   await poManager.getThankYouPage().navigateToMyOrders();
 
   await poManager.getOrdersPage().verifyOrdersPage();
-  await poManager.getOrdersPage().clickOnOrder(exactOrderNumer);
-  await poManager.getOrdersPage().verifyOrder(exactOrderNumer);
+  await poManager.getOrdersPage().clickOnOrder(exactOrderNumber);
+  await poManager.getOrdersPage().verifyOrder(exactOrderNumber);
 });

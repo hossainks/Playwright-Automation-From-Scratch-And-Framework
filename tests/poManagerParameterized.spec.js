@@ -1,7 +1,7 @@
-const { test, expect } = require('@playwright/test');
-const { POManager } = require('../page-objects/POManager');
+const { test, expect } = require("@playwright/test");
+const { POManager } = require("../page-objects/POManager");
 const dataSet = JSON.parse(
-  JSON.stringify(require('../resources/jsonDataParameterized.json'))
+  JSON.stringify(require("../resources/jsonDataParameterized.json")),
 );
 
 for (const data of dataSet) {
@@ -21,13 +21,13 @@ for (const data of dataSet) {
     await poManager.getPlaceOrderPage().fillShippingAddress();
     await poManager.getPlaceOrderPage().submitOrder();
 
-    await poManager.getThankYouPage().verifThankYou();
-    const exactOrderNumer = await poManager.getThankYouPage().getOrderId();
-    console.log(exactOrderNumer);
+    await poManager.getThankYouPage().verifyThankYou();
+    const exactOrderNumber = await poManager.getThankYouPage().getOrderId();
+    console.log(exactOrderNumber);
     await poManager.getThankYouPage().navigateToMyOrders();
 
     await poManager.getOrdersPage().verifyOrdersPage();
-    await poManager.getOrdersPage().clickOnOrder(exactOrderNumer);
-    await poManager.getOrdersPage().verifyOrder(exactOrderNumer);
+    await poManager.getOrdersPage().clickOnOrder(exactOrderNumber);
+    await poManager.getOrdersPage().verifyOrder(exactOrderNumber);
   });
 } // end of for loop

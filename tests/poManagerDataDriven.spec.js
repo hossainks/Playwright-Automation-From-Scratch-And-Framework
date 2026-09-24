@@ -1,10 +1,10 @@
-const { test, expect } = require('@playwright/test');
-const { POManager } = require('../page-objects/POManager');
+const { test, expect } = require("@playwright/test");
+const { POManager } = require("../page-objects/POManager");
 const dataSet = JSON.parse(
-  JSON.stringify(require('../resources/jsonData.json'))
+  JSON.stringify(require("../resources/jsonData.json")),
 );
 
-test.only('Login as User with Valid Credentials', async ({ page }) => {
+test.only("Login as User with Valid Credentials", async ({ page }) => {
   const poManager = new POManager(page, expect);
   await poManager.getLoginPage().goTo();
   await poManager.getLoginPage().validateLogin(dataSet.email, dataSet.password);
@@ -20,12 +20,12 @@ test.only('Login as User with Valid Credentials', async ({ page }) => {
   await poManager.getPlaceOrderPage().fillShippingAddress();
   await poManager.getPlaceOrderPage().submitOrder();
 
-  await poManager.getThankYouPage().verifThankYou();
-  const exactOrderNumer = await poManager.getThankYouPage().getOrderId();
-  console.log(exactOrderNumer);
+  await poManager.getThankYouPage().verifyThankYou();
+  const exactOrderNumber = await poManager.getThankYouPage().getOrderId();
+  console.log(exactOrderNumber);
   await poManager.getThankYouPage().navigateToMyOrders();
 
   await poManager.getOrdersPage().verifyOrdersPage();
-  await poManager.getOrdersPage().clickOnOrder(exactOrderNumer);
-  await poManager.getOrdersPage().verifyOrder(exactOrderNumer);
+  await poManager.getOrdersPage().clickOnOrder(exactOrderNumber);
+  await poManager.getOrdersPage().verifyOrder(exactOrderNumber);
 });
