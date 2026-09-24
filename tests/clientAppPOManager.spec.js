@@ -1,10 +1,10 @@
-const { test, expect } = require('@playwright/test');
-const { POManager } = require('../page-objects/POManager');
+const { test, expect } = require("@playwright/test");
+const { POManager } = require("../page-objects/POManager");
 
-test.only('Login as User with Valid Credentials', async ({ page }) => {
-  const email = 'manjuk.hossainown@gmail.com',
-    password = 'KhaTest123456%';
-  const productName = 'ADIDAS ORIGINAL';
+test.only("Login as User with Valid Credentials", async ({ page }) => {
+  const email = process.env.TEST_USER_EMAIL,
+    password = process.env.TEST_USER_PASSWORD;
+  const productName = "ADIDAS ORIGINAL";
 
   const poManager = new POManager(page, expect);
   await poManager.getLoginPage().goTo();

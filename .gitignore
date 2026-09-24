@@ -9,3 +9,4 @@ images/
 tests/morevalidation.spec.js-snapshots
 allure-results/
 allure-report/
+.env
